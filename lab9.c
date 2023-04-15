@@ -76,13 +76,6 @@ void printRecords(struct RecordType pData[], int dataSz)
 // insert record into the hash table
 void insertRecord(struct HashType *hashTable, struct RecordType *record, int tableSize)
 {
-
-
-    // call the hash function to get the index
-    // if the RecordType at that index is NULL
-        // set 'record' equal to the HashType pointer in the table at index
-    // else
-        // traverse to the end of the linkedlist and add 'record' to the end of it
     int index = hash(record->id, tableSize);
     if (hashTable[index].record == NULL) {
         hashTable[index].record = record;
@@ -107,16 +100,13 @@ void displayRecordsInHash(struct HashType *hashTable, int tableSize)
     for (int i = 0; i < tableSize; i++) {
         printf("Index %d -> ", i);
         // Traverse the linked list at that index and print each record
-        struct RecordType *curRecord = hashTable[i].record;
-        while (curRecord != NULL) {
-            printf("%d, %c, %d -> ", curRecord->id, curRecord->name, curRecord->order);
-            curRecord = curRecord->next;
+        struct RecordType *currentRecord = hashTable[i].record;
+        while (currentRecord != NULL) {
+            printf("%d, %c, %d -> ", currentRecord->id, currentRecord->name, currentRecord->order);
+            currentRecord = currentRecord->next;
         }
         printf("NULL\n");
     }
-    // for each entry in the table
-        // print the contents in that index
-        // The output should look like this (for example): "Index 1 -> 21715, Q, 16 -> 28876, a, 26 -> NULL"
 }
 
 int main(void)
@@ -141,6 +131,7 @@ int main(void)
     displayRecordsInHash(hashType, hashTableSize);
     // free all the allocated memory
     free(pRecords);
+    free(hashType);
 
     return 0;
 }
