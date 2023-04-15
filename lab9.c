@@ -105,12 +105,15 @@ void insertRecord(struct HashType *hashTable, struct RecordType *record, int tab
 void displayRecordsInHash(struct HashType *hashTable, int tableSize)
 {
     for (int i = 0; i < tableSize; i++) {
-            struct RecordType *temp = hashTable[i].record;
-            while (temp != NULL) {
-                printf("Index %d -> %d, %c, ", temp->order, temp->id, temp->name);
-                temp = temp->next;
-            }
+        printf("Index %d -> ", i);
+        // Traverse the linked list at that index and print each record
+        struct RecordType *curRecord = hashTable[i].record;
+        while (curRecord != NULL) {
+            printf("%d, %c, %d -> ", curRecord->id, curRecord->name, curRecord->order);
+            curRecord = curRecord->next;
         }
+        printf("NULL\n");
+    }
     // for each entry in the table
         // print the contents in that index
         // The output should look like this (for example): "Index 1 -> 21715, Q, 16 -> 28876, a, 26 -> NULL"
@@ -131,9 +134,8 @@ int main(void)
 
     // initialize a hashTable, use calloc (so everything is assigned to NULL)
     // for each record in pRecords, insert it into the hash table using the insertRecord function
-    while(pRecords != NULL) {
-        insertRecord(hashType, pRecords, hashTableSize);
-        pRecords = pRecords->next;
+    for (int i = 0; i < recordSz; i++) {
+        insertRecord(hashType, pRecords + i, hashTableSize);
     }
     // call the display records function
     displayRecordsInHash(hashType, hashTableSize);
