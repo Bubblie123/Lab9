@@ -7,19 +7,20 @@ struct RecordType
     int id;
     char name;
     int order;
-    // create a next pointer (for linkedlist structure)
+    struct RecordType* next;
 };
 
 // Fill out this structure
 struct HashType
 {
     // create a pointer to a RecordType
+    struct RecordType* record;
 };
 
 // Compute the hash function
 int hash(int x, int tableSize)
 {
-    // hash function is x % tableSize
+    return x % tableSize;
 }
 
 // parses input file to an integer array
@@ -75,10 +76,23 @@ void printRecords(struct RecordType pData[], int dataSz)
 // insert record into the hash table
 void insertRecord(struct HashType *hashTable, struct RecordType *record, int tableSize)
 {
+
+
     // call the hash function to get the index
+    int index = hash(record->id, tableSize);
     // if the RecordType at that index is NULL
+    if(hashTable[index] == NULL) {
+        record = hashTable[index]->record;
+    }
         // set 'record' equal to the HashType pointer in the table at index
     // else
+    else {
+        RecordType* temp = record;
+        while(temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = record;
+    }
         // traverse to the end of the linkedlist and add 'record' to the end of it
 }
 
@@ -101,7 +115,7 @@ int main(void)
     recordSz = parseData("input.txt", &pRecords);
     printRecords(pRecords, recordSz);
 
-    // Initialize the hash table
+    // Initialize the hash table of size 11
     // create a variable hashTableSize and assign it a value
     // initialize a hashTable, use calloc (so everything is assigned to NULL)
     // for each record in pRecords, insert it into the hash table using the insertRecord function
